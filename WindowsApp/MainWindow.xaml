@@ -30,14 +30,28 @@
         </Grid>-->
 
         <!-- 04 - Navigate 导航 -->
-        <DockPanel LastChildFill="True">
-            
+        <!--<DockPanel LastChildFill="True">
+
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="5" >
-                <Button Command="{Binding NavigateCommand}" CommandParameter="ViewNA" Margin="5">Navigate to View A</Button>
+                <Button Command="{Binding NavigateCommand}" CommandParameter="CustormNameA" Margin="5">Navigate to View A</Button>
                 <Button Command="{Binding NavigateCommand}" CommandParameter="ViewNB" Margin="5">Navigate to View B</Button>
+                <Button Command="{Binding NavigateCommand}" CommandParameter="Close" Margin="5">Navigate Close</Button>
+                <Button Command="{Binding JournalAwareCommand}" CommandParameter="GoBack" Margin="5">GoBack</Button>
+                <Button Command="{Binding JournalAwareCommand}" CommandParameter="GoForward" Margin="5">GoForward</Button>
             </StackPanel>
-            <!--<ContentControl prism:RegionManager.RegionName="ContentRegion" Margin="5"  />-->
+            --><!--<ContentControl prism:RegionManager.RegionName="ContentRegion" Margin="5"  />--><!--
             <TabControl prism:RegionManager.RegionName="{x:Static inf:AppRegionType.ContentRegion}" Margin="5"  />
-        </DockPanel>
+        </DockPanel>-->
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Text="PrismFrameworkForWPF" FontWeight="Bold" FontSize="25"></TextBlock>
+            <Button Margin="400,0,0,0" Content="跳转登陆" Command="{Binding AppButtonCommand}"></Button>
+            <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static inf:AppRegionType.ContentRegion}"></ContentControl>
+            <ContentControl Grid.Row="0" Grid.RowSpan="2" prism:RegionManager.RegionName="{x:Static inf:AppRegionType.SurfaceRegion}"></ContentControl>
+        </Grid>
     </Grid>
 </Window>

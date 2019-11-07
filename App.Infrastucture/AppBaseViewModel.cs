@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
@@ -9,7 +10,7 @@ namespace App.Infrastucture
     /// <summary>
     /// 所有ViewModel都需要继承这个类
     /// </summary>
-    public class AppBase : BindableBase, INavigationAware
+    public abstract class AppBaseViewModel : BindableBase, INavigationAware, IJournalAware
     {
         #region 属性
 
@@ -18,7 +19,7 @@ namespace App.Infrastucture
         /// <summary>
         /// 区域管理器
         /// </summary>
-        public IRegionManager RegionManager { get { return regionManager; } }
+        protected IRegionManager RegionManager { get { return regionManager; } }
 
 
         private IEventAggregator eventAggregator;
@@ -26,19 +27,54 @@ namespace App.Infrastucture
         /// <summary>
         /// 事件聚合器
         /// </summary>
-        public IEventAggregator EventAggregator { get { return eventAggregator; } }
+        protected IEventAggregator EventAggregator { get { return eventAggregator; } }
 
         private IRegionNavigationJournal regionNavigationJournal;
         /// <summary>
         /// APP导航(前进，后退)
         /// </summary>
-        public IRegionNavigationJournal RegionNavigationJournal { get { return regionNavigationJournal; } }
+        protected IRegionNavigationJournal RegionNavigationJournal { get { return regionNavigationJournal; } }
 
         private object navigationParameters;
         /// <summary>
         /// 当导航到当前页传递的参数
         /// </summary>
-        public object NavigationParameters { get { return navigationParameters; } }
+        protected object NavigationParameters { get { return navigationParameters; } }
+
+        /// <summary>
+        /// 当前页面区域名称
+        /// </summary>
+        protected string CurrentPageRegionType { get; private set; }
+
+        /// <summary>
+        /// 当前页面名称
+        /// </summary>
+        protected string CurrentPageName { get; private set; }
+
+        #endregion
+
+        #region 命令
+
+        private DelegateCommand<string> _AppButtonCommand;
+        /// <summary>
+        /// 界面Button命令
+        /// </summary>
+        public DelegateCommand<string> AppButtonCommand
+        {
+            get
+            {
+                if (_AppButtonCommand == null)
+                {
+                    _AppButtonCommand = new DelegateCommand<string>(App_ButtonCommand);
+                }
+                return _AppButtonCommand;
+            }
+        }
+
+        /// <summary>
+        /// 界面Button执行的虚方法
+        /// </summary>
+        public virtual void App_ButtonCommand(string command) { }
 
         #endregion
 
@@ -49,7 +85,7 @@ namespace App.Infrastucture
         /// </summary>
         /// <param name="_regionManager"></param>
         /// <param name="_eventAggregator"></param>
-        public AppBase(IRegionManager _regionManager, IEventAggregator _eventAggregator)
+        public AppBaseViewModel(IRegionManager _regionManager, IEventAggregator _eventAggregator)
         {
             regionManager = _regionManager;
             eventAggregator = _eventAggregator;
@@ -76,6 +112,8 @@ namespace App.Infrastucture
         /// <param name="navigationContext"></param>
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            CurrentPageRegionType = navigationContext.NavigationService.Region.Name;
+            CurrentPageName = navigationContext.Uri.OriginalString;
             regionNavigationJournal = navigationContext.NavigationService.Journal;
             navigationParameters = navigationContext.Parameters["param"];
             App_OnNavigatedTo?.Invoke(navigationContext);
@@ -93,7 +131,7 @@ namespace App.Infrastucture
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            throw new System.NotImplementedException();
+
         }
 
 
@@ -120,7 +158,7 @@ namespace App.Infrastucture
         /// <summary>
         /// 跳转页面
         /// </summary>
-        protected void RequestNavigate(string regionType, string appViewName, NavigationParameters parameters)
+        protected void RequestNavigate(string regionType, string appViewName, NavigationParameters parameters = null)
         {
             RegionManager?.RequestNavigate(regionType, appViewName, parameters);
         }
@@ -128,40 +166,43 @@ namespace App.Infrastucture
         /// <summary>
         /// 跳转页面并关闭当前页面
         /// </summary>
-        protected void RequestNavigateAndCloseCurrentPage(string regionType, string appViewName, NavigationParameters parameters)
+        protected void RequestNavigateAndColseCurrentPage(string regionType, string appViewName, NavigationParameters parameters = null)
         {
             RegionManager?.RequestNavigate(regionType, appViewName, parameters);
-            ViewClose(regionType);
+            if (!string.IsNullOrEmpty(CurrentPageRegionType))
+                ViewClose(CurrentPageRegionType);
         }
 
         /// <summary>
-        /// 关闭当前页面
+        /// 关闭页面
         /// </summary>
-        /// <param name="curPage"></param>
         protected void ViewClose(string regionType, AppBasePage curPage = null)
         {
-            try
-            {
-                if (curPage == null)
-                {
-                    curPage = (AppBasePage)regionManager.Regions[regionType].ActiveViews.FirstOrDefault();
-                    if (curPage != null)
-                    {
-                        regionManager.Regions[regionType].Remove(curPage);
-                    }
-                }
-                else
-                {
-                    regionManager.Regions[regionType].Remove(curPage);
-                }
-            }
-            catch (Exception ex)
-            {
-                //WMSLog.WriteLog(LogType.Error, string.Format("Tab子页关闭失败，原因：{0}", ex.ToString()));
-            }
+            var appRegions = regionManager.Regions.Select(x => x.Name).ToList();
+            if (!appRegions.Any(x => x.Equals(regionType)))
+                return;
+            var appRegion = regionManager.Regions[regionType];
+            if (curPage == null)
+                curPage = regionManager.Regions[regionType].ActiveViews.FirstOrDefault() as AppBasePage;
+            if (curPage != null && curPage.GetPageName().Equals(CurrentPageName))
+                appRegion.Remove(curPage);
         }
 
         #endregion
 
+        #region 是否在导航历史中，存在这个页面
+
+        public bool bPersistInHistory = false;
+
+        /// <summary>
+        /// 是否在导航历史中，存在这个页面
+        /// </summary>
+        /// <returns></returns>
+        public bool PersistInHistory()
+        {
+            return bPersistInHistory;
+        }
+
+        #endregion
     }
 }

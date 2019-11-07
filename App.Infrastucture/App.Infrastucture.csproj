@@ -88,11 +88,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppBase.cs" />
+    <Compile Include="AppBaseViewModel.cs" />
+    <Compile Include="AppBaseModule.cs" />
     <Compile Include="AppBasePage.cs" />
-    <Compile Include="Common\ILog.cs" />
+    <Compile Include="Controls\UserControlModel.xaml.cs">
+      <DependentUpon>UserControlModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventAggregator\MessageSentEvent.cs" />
-    <Compile Include="Log4Net\Log4NetHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -118,6 +120,16 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Log\" />
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\UserControlModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

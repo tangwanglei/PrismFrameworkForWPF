@@ -9,8 +9,14 @@ namespace App.Infrastucture
     /// <summary>
     /// 所有View都需要继承这个类
     /// </summary>
-    public class AppBasePage : System.Windows.Controls.UserControl
+    public abstract class AppBasePage : System.Windows.Controls.UserControl
     {
-
+        /// <summary>
+        /// 获取PageName
+        /// </summary>
+        public virtual string GetPageName()
+        {
+            return GetType().Name;
+        }
     }
 }

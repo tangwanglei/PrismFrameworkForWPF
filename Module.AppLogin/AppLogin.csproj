@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7E2F818B-814B-4BFC-B516-4D315F139415}</ProjectGuid>
+    <ProjectGuid>{4EDA9A05-887F-4E95-9992-0D9D95FD1074}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ModuleNA</RootNamespace>
-    <AssemblyName>ModuleNA</AssemblyName>
+    <RootNamespace>AppLogin</RootNamespace>
+    <AssemblyName>AppLogin</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -70,7 +71,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModuleNAModule.cs" />
+    <Compile Include="AppLoginModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -84,14 +85,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="View\ViewNA.xaml.cs">
-      <DependentUpon>ViewNA.xaml</DependentUpon>
+    <Compile Include="ViewModel\LoginPageViewModel.cs" />
+    <Compile Include="View\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ViewNB.xaml.cs">
-      <DependentUpon>ViewNB.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="VM\ViewNBVM.cs" />
-    <Compile Include="VM\ViewNAVM.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -104,16 +101,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App.Infrastucture\App.Infrastucture.csproj">
-      <Project>{3F8AB3D5-D9E7-4D67-BC46-D87E6F6A57B4}</Project>
+      <Project>{3f8ab3d5-d9e7-4d67-bc46-d87e6f6a57b4}</Project>
       <Name>App.Infrastucture</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Page Include="View\ViewNA.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ViewNB.xaml">
+    <Page Include="View\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

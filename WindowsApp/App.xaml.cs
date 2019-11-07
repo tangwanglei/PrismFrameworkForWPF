@@ -111,7 +111,7 @@ namespace WindowsApp
             //return new DirectoryModuleCatalog() { ModulePath = @".\Modules" };
             return new DirectoryModuleCatalog() { ModulePath = @".\" };
         }
-        
+
         /// <summary>
         /// 配置模块目录
         /// </summary>
@@ -126,7 +126,7 @@ namespace WindowsApp
                 InitializationMode = InitializationMode.OnDemand
             });
         }
-        
+
         /// <summary>
         /// 配置ViewModel加载项
         /// 注：VM的命名空间和View的命名空间一致才能自动匹配到
@@ -138,12 +138,13 @@ namespace WindowsApp
 
             ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver((viewType) =>
             {
-                var viewName = viewType.FullName;
+                var namespaces = viewType.Namespace.Split('.');
+                var viewModelName = $"{namespaces[0]}.ViewModel.{viewType.Name}ViewModel";
                 var viewAssemblyName = viewType.GetTypeInfo().Assembly.FullName;
-                var viewModelName = $"{viewName}VM, {viewAssemblyName}";
-                return Type.GetType(viewModelName);
+                var viewModelFullName = $"{viewModelName}, {viewAssemblyName}";
+                return Type.GetType(viewModelFullName);
             });
-            
+
             // type / type
             //ViewModelLocationProvider.Register(typeof(MainWindow).ToString(), typeof(CustomViewModel));
 

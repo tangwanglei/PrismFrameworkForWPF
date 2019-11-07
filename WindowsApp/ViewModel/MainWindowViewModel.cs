@@ -1,14 +1,14 @@
-﻿using Prism.Commands;
+﻿using App.Infrastucture;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
 
-namespace WindowsApp
+namespace WindowsApp.ViewModel
 {
-    public class MainWindowVM : BindableBase
+    public class MainWindowViewModel : AppBaseViewModel
     {
-        private IRegionManager _regionManager;
-
         private string _title = "Prism Unity Application";
         public string Title
         {
@@ -44,7 +44,11 @@ namespace WindowsApp
 
         public DelegateCommand<string> NavigateCommand { get; private set; }
 
-        public MainWindowVM(IRegionManager regionManager)
+
+        public DelegateCommand<string> JournalAwareCommand { get; private set; }
+
+        public MainWindowViewModel(IRegionManager _regionManager, IEventAggregator _eventAggregator) :
+            base(_regionManager, _eventAggregator)
         {
             //ExecuteDelegateCommand = new DelegateCommand(Execute, CanExecute);
 
@@ -57,9 +61,11 @@ namespace WindowsApp
             //ExecuteGenericDelegateCommand = new DelegateCommand<string>(ExecuteGeneric)
             //    .ObservesCanExecute(() => IsEnabled);
 
-            _regionManager = regionManager;
+            //_regionManager = regionManager;
 
             NavigateCommand = new DelegateCommand<string>(Navigate);
+
+            JournalAwareCommand = new DelegateCommand<string>(JournalAware);
         }
 
         private void Execute()
@@ -79,8 +85,25 @@ namespace WindowsApp
 
         private void Navigate(string navigatePath)
         {
-            if (navigatePath != null)
-                _regionManager.RequestNavigate("ContentRegion", navigatePath);
+            if ("Close" == navigatePath)
+            {
+                RegionManager.Regions["ContentRegion"].RemoveAll();
+            }
+            else if (navigatePath != null)
+                RegionManager.RequestNavigate("ContentRegion", navigatePath);
+        }
+
+        private void JournalAware(string goBackAndgoForward)
+        {
+            if (goBackAndgoForward == "GoBack")
+                GoBack();
+            if (goBackAndgoForward == "GoForward")
+                GoForward();
+        }
+
+        public override void App_ButtonCommand(string command)
+        {
+            RequestNavigate(AppRegionType.ContentRegion, "HomePage");
         }
     }
 }

@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Infrastucture", "App.In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleNA", "ModuleNA\ModuleNA.csproj", "{7E2F818B-814B-4BFC-B516-4D315F139415}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppLogin", "Module.AppLogin\AppLogin.csproj", "{4EDA9A05-887F-4E95-9992-0D9D95FD1074}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHome", "AppHome\AppHome.csproj", "{BDB6F6A8-1ACD-4FBC-9F7A-7D1C555A2B47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{7E2F818B-814B-4BFC-B516-4D315F139415}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E2F818B-814B-4BFC-B516-4D315F139415}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E2F818B-814B-4BFC-B516-4D315F139415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EDA9A05-887F-4E95-9992-0D9D95FD1074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EDA9A05-887F-4E95-9992-0D9D95FD1074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EDA9A05-887F-4E95-9992-0D9D95FD1074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EDA9A05-887F-4E95-9992-0D9D95FD1074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDB6F6A8-1ACD-4FBC-9F7A-7D1C555A2B47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDB6F6A8-1ACD-4FBC-9F7A-7D1C555A2B47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDB6F6A8-1ACD-4FBC-9F7A-7D1C555A2B47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDB6F6A8-1ACD-4FBC-9F7A-7D1C555A2B47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

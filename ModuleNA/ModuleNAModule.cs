@@ -14,7 +14,7 @@ namespace ModuleNA
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<ViewNA>();
+            containerRegistry.RegisterForNavigation<ViewNA>("CustormNameA");
             containerRegistry.RegisterForNavigation<ViewNB>();
         }
     }
