@@ -9,7 +9,7 @@ namespace App.Infrastucture
     /// <summary>
     /// 区域适配器类型
     /// </summary>
-    public class AppRegionType
+    public class AppRegions
     {
         /// <summary>
         /// 窗体遮罩区域

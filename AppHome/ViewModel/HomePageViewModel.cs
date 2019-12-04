@@ -41,7 +41,7 @@ namespace AppHome.ViewModel
 
         public override void App_ButtonCommand(string command)
         {
-            RequestNavigateAndColseCurrentPage(AppRegionType.SurfaceRegion, "LoginPage");
+            RequestNavigateAndColseCurrentPage(AppRegions.SurfaceRegion, "LoginPage");
         }
 
         #endregion

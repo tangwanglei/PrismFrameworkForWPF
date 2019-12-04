@@ -4,6 +4,8 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace App.Infrastucture
 {
@@ -176,7 +178,10 @@ namespace App.Infrastucture
         /// <summary>
         /// 关闭页面
         /// </summary>
-        protected void ViewClose(string regionType, AppBasePage curPage = null)
+        /// <param name="regionType">区域名称</param>
+        /// <param name="targetPageName">目标页面名称(如果目标页面不是AppBasePage,则需要填写此值防止误删页面)</param>
+        /// <param name="curPage">待关闭的页面</param>
+        protected void ViewClose(string regionType, string targetPageName = null, AppBasePage curPage = null)
         {
             var appRegions = regionManager.Regions.Select(x => x.Name).ToList();
             if (!appRegions.Any(x => x.Equals(regionType)))
@@ -186,6 +191,38 @@ namespace App.Infrastucture
                 curPage = regionManager.Regions[regionType].ActiveViews.FirstOrDefault() as AppBasePage;
             if (curPage != null && curPage.GetPageName().Equals(CurrentPageName))
                 appRegion.Remove(curPage);
+            else if (curPage == null)
+            {
+                var userPage = regionManager.Regions[regionType].ActiveViews.FirstOrDefault() as UserControl;
+                if (userPage != null && userPage.GetType().Name.Equals(targetPageName))
+                    appRegion.Remove(userPage);
+            }
+
+        }
+
+        /// <summary>
+        /// 区别UI线程异步执行耗时函数，例如：导出，导入，保存图片等耗时操作
+        /// </summary>
+        /// <param name="fun">异步执行的函数(此函数不在UI线程执行，为具体耗时的操作，不可操作UI线程对象)</param>
+        /// <param name="completedFun">异步结束时所要执行的函数(此函数依然在UI线程执行，因此可以操作UI线程对象)</param>
+        protected void Async(Func<bool> fun, Func<bool> completedFun)
+        {
+            var asyncFun = new Func<bool>(() =>
+            {
+                //主要执行的
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    RequestNavigate(AppRegions.SurfaceRegion, AppPages.LoadingPage);
+                }), null);
+                return fun();
+            });
+            asyncFun.BeginInvoke((result) => Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                ViewClose(AppRegions.SurfaceRegion);
+                if (result.IsCompleted)
+                    completedFun();
+            }), null), null);
+
         }
 
         #endregion

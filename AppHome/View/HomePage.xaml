@@ -1,5 +1,5 @@
-﻿<infrastucture:AppBasePage
-             xmlns:infrastucture="clr-namespace:App.Infrastucture;assembly=App.Infrastucture"
+﻿<inf:AppBasePage
+             xmlns:inf="clr-namespace:App.Infrastucture;assembly=App.Infrastucture"
              x:Class="AppHome.View.HomePage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,8 +9,17 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <inf:AppBasePage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/App.Infrastucture;component/Themes/Restyle_Button.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </inf:AppBasePage.Resources>
     <Grid Background="White">
         <TextBlock Text="{Binding TextBlockData,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></TextBlock>
-        <Button Height="60" Width="150" Content="Login" Command="{Binding AppButtonCommand}" CommandParameter="Login"></Button>
+        <Button Margin="0,0,0,150" Height="60" Width="150" Content="Login" Command="{Binding AppButtonCommand}" CommandParameter="Login"></Button>
+        <Button Margin="0,0,0,0" Height="60" Width="150" Content="创建" Command="{Binding AppButtonCommand}" Visibility="{Binding CreateVisibility}" CommandParameter="Login"></Button>
+        <Button Margin="0,0,0,-150" Height="60" Width="150" Command="{Binding AppButtonCommand}" Style="{DynamicResource CreateButton}" CommandParameter="Login"></Button>
     </Grid>
-</infrastucture:AppBasePage>
+</inf:AppBasePage>

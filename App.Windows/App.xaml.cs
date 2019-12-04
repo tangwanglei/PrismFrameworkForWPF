@@ -8,14 +8,13 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace WindowsApp
+namespace App.Windows
 {
     /// <summary>
     /// App.xaml 的交互逻辑
     /// </summary>
     public partial class App : PrismApplication
     {
-
         #region 程序启动
 
         /// <summary>

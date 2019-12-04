@@ -4,6 +4,8 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
+using System.Threading;
+using System.Windows;
 
 namespace WindowsApp.ViewModel
 {
@@ -24,6 +26,26 @@ namespace WindowsApp.ViewModel
             {
                 SetProperty(ref _isEnabled, value);
                 ExecuteDelegateCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private Visibility _CreateVisibility = Visibility.Visible;
+        public Visibility CreateVisibility
+        {
+            get { return _CreateVisibility; }
+            set
+            {
+                SetProperty(ref _CreateVisibility, value);
+            }
+        }
+
+        private Visibility _ViewVisibility = Visibility.Hidden;
+        public Visibility ViewVisibility
+        {
+            get { return _ViewVisibility; }
+            set
+            {
+                SetProperty(ref _ViewVisibility, value);
             }
         }
 
@@ -103,7 +125,17 @@ namespace WindowsApp.ViewModel
 
         public override void App_ButtonCommand(string command)
         {
-            RequestNavigate(AppRegionType.ContentRegion, "HomePage");
+            base.Async(
+            () =>
+                {
+                    Thread.Sleep(3000);
+                    return true;
+                },
+            () =>
+                {
+                    RequestNavigate(AppRegions.ContentRegion, "HomePage");
+                    return true;
+                });
         }
     }
 }
